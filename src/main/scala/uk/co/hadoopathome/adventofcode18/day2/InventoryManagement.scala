@@ -2,11 +2,12 @@ package uk.co.hadoopathome.adventofcode18.day2
 
 object InventoryManagement {
     def generateChecksum(ls: List[List[Char]]): Int = {
-        val numTwos = ls.map(x => hasOccurrencesInString(x, 2))
+        totalOccurrences(ls, 2) * totalOccurrences(ls, 3)
+    }
+
+    def totalOccurrences(ls: List[List[Char]], count: Int): Int = {
+        ls.map(x => hasOccurrencesInString(x, count))
             .foldLeft(0)((acc, x) => if (x) acc + 1 else acc + 0)
-        val numThrees = ls.map(x => hasOccurrencesInString(x, 3))
-            .foldLeft(0)((acc, x) => if (x) acc + 1 else acc + 0)
-        numTwos * numThrees
     }
 
     def hasOccurrencesInString(ls: List[Char], count: Int): Boolean = {
