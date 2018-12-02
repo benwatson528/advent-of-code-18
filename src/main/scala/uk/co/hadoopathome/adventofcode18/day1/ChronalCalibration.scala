@@ -8,7 +8,6 @@ object ChronalCalibration {
     def sumNumbersRec(ls: List[Int], sum: Int): Int = {
         ls match {
             case x :: xx => sumNumbersRec(xx, sum + x)
-            case x :: Nil => sum + x
             case _ => sum
         }
     }
