@@ -35,8 +35,8 @@ class InventoryManagementTest extends FunSuite {
         assert(false === InventoryManagement.hasOccurrencesInString(input, 3))
     }
 
-    test("generateChecksum testInput") {
-        val input = Source.fromResource("day2/testInput.txt").getLines.toList.map(_.toCharArray.toList)
+    test("generateChecksum test input") {
+        val input = Source.fromResource("day2/part-1-test-input.txt").getLines.toList.map(_.toCharArray.toList)
         assert(12 === InventoryManagement.generateChecksum(input))
     }
 
