@@ -3,6 +3,7 @@ package uk.co.hadoopathome.adventofcode18.day2
 import org.scalatest.FunSuite
 
 import scala.io.Source
+
 class DiffFinderTest extends FunSuite {
     test("compareWords similar") {
         val word1 = "fghij".toList
