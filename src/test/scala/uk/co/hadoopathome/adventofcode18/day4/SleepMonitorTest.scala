@@ -17,7 +17,7 @@ class SleepMonitorTest extends FunSuite {
             .map(convertToActivityLog).sortBy(x => (x.month, x.day,  x.hour, x.minute))
         val input = populateGuardIdsRec(incompleteInput, incompleteInput.head.guardId, List())
         val sleepiestGuard = SleepMonitor.findSleepiestGuard(input)
-        val minuteMostAsleep = SleepMonitor.findMinuteMostAsleep(input, sleepiestGuard)
+        val (minuteMostAsleep, _) = SleepMonitor.findMinuteMostAsleep(input, sleepiestGuard)
         assert(10 === sleepiestGuard)
         assert(24 === minuteMostAsleep)
         assert(240 === minuteMostAsleep * sleepiestGuard)
@@ -28,10 +28,31 @@ class SleepMonitorTest extends FunSuite {
             .map(convertToActivityLog).sortBy(x => (x.month, x.day,  x.hour, x.minute))
         val input = populateGuardIdsRec(incompleteInput, incompleteInput.head.guardId, List())
         val sleepiestGuard = SleepMonitor.findSleepiestGuard(input)
-        val minuteMostAsleep = SleepMonitor.findMinuteMostAsleep(input, sleepiestGuard)
+        val (minuteMostAsleep, _) = SleepMonitor.findMinuteMostAsleep(input, sleepiestGuard)
         assert(2039 === sleepiestGuard)
         assert(49 === minuteMostAsleep)
-        assert(99911 === minuteMostAsleep * sleepiestGuard)    }
+        assert(99911 === minuteMostAsleep * sleepiestGuard)
+    }
+
+    test("findMinuteMostAsleepForAll test input") {
+        val incompleteInput = Source.fromResource("day4/test-input.txt").getLines.toList
+            .map(convertToActivityLog).sortBy(x => (x.month, x.day,  x.hour, x.minute))
+        val input = populateGuardIdsRec(incompleteInput, incompleteInput.head.guardId, List())
+        val (guardId, minuteMostAsleep) = SleepMonitor.findMinuteMostAsleepForAll(input)
+        assert(99 === guardId)
+        assert(45 === minuteMostAsleep)
+        assert(4455 === minuteMostAsleep * guardId)
+    }
+
+    test("findMinuteMostAsleepForAll input") {
+        val incompleteInput = Source.fromResource("day4/input.txt").getLines.toList
+            .map(convertToActivityLog).sortBy(x => (x.month, x.day,  x.hour, x.minute))
+        val input = populateGuardIdsRec(incompleteInput, incompleteInput.head.guardId, List())
+        val (guardId, minuteMostAsleep) = SleepMonitor.findMinuteMostAsleepForAll(input)
+        assert(1733 === guardId)
+        assert(38 === minuteMostAsleep)
+        assert(65854 === minuteMostAsleep * guardId)
+    }
 
     def convertToActivityLog(s: String): ActivityLog = {
         val dateStatusSplit = s.split("] ")
