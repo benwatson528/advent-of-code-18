@@ -1,9 +1,7 @@
 package uk.co.hadoopathome.adventofcode18.day5
 
 object AlchemicalReduction {
-    def reducePolymer(polymer: String): String = {
-        polymer.scanLeft("")((a, b) => reduceAdjacent(a, b)).last
-    }
+    def reducePolymer(polymer: String): String = polymer.scanLeft("")((a, b) => reduceAdjacent(a, b)).last
 
     def biggestReduction(polymer: String): Int = {
         val reducedPolymers = for (i <- 'a' to 'z') yield reducePolymer(removeLetter(i, polymer))
@@ -18,11 +16,7 @@ object AlchemicalReduction {
         }
     }
 
-    def removeLetter(i: Char, polymer: String): String = {
-        polymer.filter(x => Character.toLowerCase(x) != i)
-    }
+    def removeLetter(i: Char, polymer: String): String = polymer.filter(x => Character.toLowerCase(x) != i)
 
-    def isCapitalisedMatch(a: Char, b: Char): Boolean = {
-        a != b && Character.toUpperCase(a) == Character.toUpperCase(b)
-    }
+    def isCapitalisedMatch(a: Char, b: Char): Boolean = a != b && Character.toUpperCase(a) == Character.toUpperCase(b)
 }
