@@ -20,4 +20,13 @@ class AlchemicalReductionTest extends FunSuite {
         val input = Source.fromResource("day5/input.txt").mkString
         assert(11242 === AlchemicalReduction.reducePolymer(input).length)
     }
+
+    test("longestReduction dabAcCaCBAcCcaDA") {
+        val input = "dabAcCaCBAcCcaDA"
+        assert(4 === AlchemicalReduction.biggestReduction(input))
+    }
+    test("longestReduction real") {
+        val input = Source.fromResource("day5/input.txt").mkString
+        assert(5492 === AlchemicalReduction.biggestReduction(input))
+    }
 }
