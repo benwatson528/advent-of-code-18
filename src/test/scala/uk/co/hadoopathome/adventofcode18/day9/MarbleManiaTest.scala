@@ -28,6 +28,11 @@ class MarbleManiaTest extends FunSuite {
     assert(((3, 10 :: 11 :: 12 :: 14 :: 15 :: Nil), 36) === MarbleMania.addPieceSpecial(board, 23))
   }
 
+  test("testAddPieceSpecial last element") {
+    val board = (0, 10 :: 11 :: 12 :: 13 :: 14 :: 15 :: Nil)
+    assert(((0, 10 :: 11 :: 12 :: 13 :: 14 :: Nil), 33) === MarbleMania.addPieceSpecial(board, 23))
+  }
+
   test("testPlayGame 9 players 25 turns") {
     assert(32 === MarbleMania.playGame(9, 25))
   }
