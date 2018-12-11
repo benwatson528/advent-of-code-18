@@ -43,7 +43,7 @@ object MarbleMania {
             position = board._1 - 7
         }
         val newPosition = if (position == boardSize - 1) 0 else position
-        ((newPosition, removeFromList(board._2, position)), board._2(position) + 23)
+        ((newPosition, removeFromList(board._2, position)), board._2(position) + round)
     }
 
     def updateList(ls: List[Int], i: Int, value: Int): List[Int] = ls.zipWithIndex.map(x =>

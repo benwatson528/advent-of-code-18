@@ -56,4 +56,12 @@ class MarbleManiaTest extends FunSuite {
   test("testPlayGame 30 players 5807 turns") {
     assert(37305 === MarbleMania.playGame(30, 5807))
   }
+
+  test("testPlayGame 491 players 71058 turns") {
+    assert(361466 === MarbleMania.playGame(491, 71058))
+  }
+
+  test("testPlayGame 491 players 71058 * 100 turns") {
+    assert(361466 === MarbleMania.playGame(491, 71058 * 100))
+  }
 }
