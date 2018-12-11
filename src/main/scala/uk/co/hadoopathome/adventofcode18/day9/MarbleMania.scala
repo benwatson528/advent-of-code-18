@@ -6,19 +6,19 @@ object MarbleMania {
     def playGame(numPlayers: Int, numRounds: Int): Int = {
         val board = (0, 0 :: Nil)
         val players = List.fill(numPlayers)(0)
-        val finalScores = takeTurn(board, players, numRounds, 1)
+        val finalScores = takeTurn(board, players, numRounds, 1, 0)
         println(finalScores)
         finalScores.max
     }
 
-    def takeTurn(board: Board, players: List[Int], numRounds: Int, round: Int): List[Int] = {
-        if (round <= numRounds) {
+    def takeTurn(board: Board, players: List[Int], numRounds: Int, round: Int, playerNum: Int): List[Int] = {
+        if (round < numRounds) {
             if (round % 23 == 0) {
                 val (updatedBoard: Board, score: Int) = addPieceSpecial(board, round)
-                val updatedPlayers = updatePlayers(players, score, round)
-                takeTurn(updatedBoard, updatedPlayers, numRounds, round + 1)
+                val updatedPlayers = updateList(players, playerNum, score)
+                takeTurn(updatedBoard, updatedPlayers, numRounds, round + 1, (playerNum + 1) % players.size)
             } else {
-                takeTurn(addPieceNormal(board, round), players, numRounds, round + 1)
+                takeTurn(addPieceNormal(board, round), players, numRounds, round + 1, (playerNum + 1) % players.size)
             }
         } else {
             players
@@ -35,24 +35,21 @@ object MarbleMania {
     }
 
     def addPieceSpecial(board: (Int, List[Int]), round: Int): (Board, Int) = {
-        var position = 0
-        if (board._1 - 7 < 0) {
-            position = board._2.size - Math.abs(board._1 - 7)
-        } else {
-            position = board._1 - 7
-        }
-
-        if (position == -1) {
-            ((0, board._2.take(board._2.size - 1)), board._2.head + 23)
-        } else {
-            ((position, board._2.take(position) ::: board._2.drop(position + 1)), board._2(position) + 23)
-        }
+        val boardSize = board._2.size
+        val position = (board._1 - 7 + boardSize) % boardSize
+//        var position = 0
+//        // if current position - 7 wraps around
+//        if ((board._1 - 7) < 0) {
+//            position = boardSize - (Math.abs(board._1 - 7) % boardSize)
+//        } else {
+//            position = board._1 - 7
+//        }
+        val newPosition = if (position == boardSize - 1) 0 else position
+        ((newPosition, removeFromList(board._2, position)), board._2(position) + 23)
     }
 
-    def updatePlayers(players: List[Int], score: Int, round: Int): List[Int] = {
-        val updatedPlayers = players.take((round - 1) % players.size) :::
-            (players((round - 1) % players.size) + score) ::
-            players.drop(round % players.size)
-        updatedPlayers
-    }
+    def updateList(ls: List[Int], i: Int, value: Int): List[Int] = ls.zipWithIndex.map(x =>
+        if (x._2 == i) x._1 + value else x._1)
+
+    def removeFromList(ls: List[Int], i: Int): List[Int] = ls.zipWithIndex.filter(_._2 != i).map(_._1)
 }
