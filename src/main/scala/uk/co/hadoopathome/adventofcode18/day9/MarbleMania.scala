@@ -36,14 +36,12 @@ object MarbleMania {
 
     def addPieceSpecial(board: (Int, List[Int]), round: Int): (Board, Int) = {
         val boardSize = board._2.size
-        val position = (board._1 - 7 + boardSize) % boardSize
-//        var position = 0
-//        // if current position - 7 wraps around
-//        if ((board._1 - 7) < 0) {
-//            position = boardSize - (Math.abs(board._1 - 7) % boardSize)
-//        } else {
-//            position = board._1 - 7
-//        }
+        var position = 0
+        if ((board._1 - 7) < 0) {
+            position = boardSize - (Math.abs(board._1 - 7) % boardSize)
+        } else {
+            position = board._1 - 7
+        }
         val newPosition = if (position == boardSize - 1) 0 else position
         ((newPosition, removeFromList(board._2, position)), board._2(position) + 23)
     }
