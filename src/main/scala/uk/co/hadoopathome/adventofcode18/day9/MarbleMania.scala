@@ -1,22 +1,24 @@
 package uk.co.hadoopathome.adventofcode18.day9
 
-object MarbleMania {
-    type Board = (Int, List[Int])
+import scala.collection.mutable.ArrayBuffer
 
-    def playGame(numPlayers: Int, numRounds: Int): Int = {
-        val board = (0, 0 :: Nil)
-        val players = List.fill(numPlayers)(0)
+object MarbleMania {
+    type Board = (Int, ArrayBuffer[Long])
+
+    def playGame(numPlayers: Int, numRounds: Int): Long = {
+        val board = (0, ArrayBuffer(0l))
+        val players = ArrayBuffer.fill(numPlayers)(0l)
         val finalScores = takeTurn(board, players, numRounds, 1, 0)
-        println(finalScores)
         finalScores.max
     }
 
-    def takeTurn(board: Board, players: List[Int], numRounds: Int, round: Int, playerNum: Int): List[Int] = {
+    def takeTurn(board: Board, players: ArrayBuffer[Long], numRounds: Int, round: Int, playerNum: Int): ArrayBuffer[Long] = {
         if (round < numRounds) {
             if (round % 23 == 0) {
-                val (updatedBoard: Board, score: Int) = addPieceSpecial(board, round)
-                val updatedPlayers = updateList(players, playerNum, score)
-                takeTurn(updatedBoard, updatedPlayers, numRounds, round + 1, (playerNum + 1) % players.size)
+                val (updatedBoard, score) = addPieceSpecial(board, round)
+                players.update(playerNum, players(playerNum) + score)
+               // val updatedPlayers = updateList(players, playerNum, score)
+                takeTurn(updatedBoard, players, numRounds, round + 1, (playerNum + 1) % players.size)
             } else {
                 takeTurn(addPieceNormal(board, round), players, numRounds, round + 1, (playerNum + 1) % players.size)
             }
@@ -27,14 +29,15 @@ object MarbleMania {
 
     def addPieceNormal(board: Board, round: Int): Board = {
         if (board._1 + 2 == board._2.size) {
-            (board._2.size, board._2 :+ round)
+            (board._2.size, board._2 :+ round.toLong)
         } else {
             val position = (board._1 + 2) % board._2.size
-            (position, board._2.take(position) ::: round :: board._2.drop(position))
+            board._2.insert(position, round)
+            (position, board._2)
         }
     }
 
-    def addPieceSpecial(board: (Int, List[Int]), round: Int): (Board, Int) = {
+    def addPieceSpecial(board: Board, round: Int): (Board, Long) = {
         val boardSize = board._2.size
         var position = 0
         if ((board._1 - 7) < 0) {
@@ -43,11 +46,8 @@ object MarbleMania {
             position = board._1 - 7
         }
         val newPosition = if (position == boardSize - 1) 0 else position
-        ((newPosition, removeFromList(board._2, position)), board._2(position) + round)
+        val score = board._2(position) + round
+        board._2.remove(position)
+        ((newPosition, board._2), score)
     }
-
-    def updateList(ls: List[Int], i: Int, value: Int): List[Int] = ls.zipWithIndex.map(x =>
-        if (x._2 == i) x._1 + value else x._1)
-
-    def removeFromList(ls: List[Int], i: Int): List[Int] = ls.zipWithIndex.filter(_._2 != i).map(_._1)
 }
