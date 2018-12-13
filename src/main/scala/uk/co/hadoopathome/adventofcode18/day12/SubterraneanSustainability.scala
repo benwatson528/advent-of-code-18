@@ -8,7 +8,6 @@ object SubterraneanSustainability {
         processRecordsRec(initialPots: Pots, rules: Rules, numIters, 0)
 
     def processRecordsRec(pots: Pots, rules: Rules, numIters: Int, iter: Int): Pots = {
-        if (iter > 9000) println(pots)
         if (iter == numIters) {
             pots
         } else {
