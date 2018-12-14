@@ -6,6 +6,11 @@ object MineCartMadness {
         findCollision(cartsAtCollision)
     }
 
+    def runCartsRemoveCrashed(board: List[Track], carts: List[Cart]): Coord = {
+        val lastCart = moveCartsRemoveCrashedIter(board, carts)
+        lastCart.head.position
+    }
+
     def moveCartsIter(board: List[Track], carts: List[Cart]): List[Cart] = {
         val sortedCarts = carts.sortBy(c => (c.position._2, c.position._1))
         var movedCarts = List[Cart]()
@@ -16,11 +21,41 @@ object MineCartMadness {
             movedCarts = movedCarts :+ movedCart
             originalCarts = originalCarts.filter(_ != sortedCarts(i))
             val currentCarts = originalCarts ::: movedCarts
+
             if (hasCollided(currentCarts)) {
                 return currentCarts
             }
         }
         moveCartsIter(board, movedCarts)
+    }
+
+    def moveCartsRemoveCrashedIter(board: List[Track], carts: List[Cart]): List[Cart] = {
+        val sortedCarts = carts.sortBy(c => (c.position._2, c.position._1))
+        var movedCarts = List[Cart]()
+        var collidedCarts = List[Cart]()
+        var originalCarts = sortedCarts
+
+        for (i <- sortedCarts.indices) {
+            val currentCart = sortedCarts(i)
+            if (!collidedCarts.contains(currentCart)) {
+                val movedCart = moveCart(currentCart, board)
+                movedCarts = movedCarts :+ movedCart
+                originalCarts = originalCarts.filter(_ != sortedCarts(i))
+                val currentCarts = originalCarts ::: movedCarts
+
+                if (hasCollided(currentCarts)) {
+                    val collisionCoord = findCollision(currentCarts)
+                    collidedCarts = collidedCarts ::: currentCarts.filter(_.position == collisionCoord)
+                    movedCarts = movedCarts.filter(_.position != collisionCoord) //it's around here....
+                }
+            }
+        }
+
+        if (movedCarts.size == 1) {
+            movedCarts
+        } else {
+            moveCartsRemoveCrashedIter(board, movedCarts)
+        }
     }
 
     def moveCart(cart: Cart, board: List[Track]): Cart = {

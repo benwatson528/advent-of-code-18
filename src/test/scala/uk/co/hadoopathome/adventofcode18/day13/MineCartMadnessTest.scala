@@ -9,13 +9,23 @@ class MineCartMadnessTest extends FunSuite {
     val directions: List[Char] = '^' :: 'v' :: '<' :: '>' :: Nil
 
     test("runCarts test input") {
-        val (board, carts) = parseInput("day13/test-input.txt")
+        val (board, carts) = parseInput("day13/part-1-test-input.txt")
         assert((7, 3) === MineCartMadness.runCarts(board, carts))
     }
 
     test("runCarts real") {
         val (board, carts) = parseInput("day13/input.txt")
         assert((43, 91) === MineCartMadness.runCarts(board, carts))
+    }
+
+    ignore("runCartsRemoveCrashed test input") {
+        val (board, carts) = parseInput("day13/part-2-test-input.txt")
+        assert((6, 4) === MineCartMadness.runCartsRemoveCrashed(board, carts))
+    }
+
+    test("runCartsRemoveCrashed real") {
+        val (board, carts) = parseInput("day13/input.txt")
+        assert((35, 59) === MineCartMadness.runCartsRemoveCrashed(board, carts))
     }
 
     private def parseInput(filename: String): (List[Track], List[Cart]) = {
